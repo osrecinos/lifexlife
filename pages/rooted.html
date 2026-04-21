@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROOTED — LifexLife Foundation</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .init-hero { background: linear-gradient(145deg, #070F0F, #1A7A3A); min-height: 380px; display: flex; align-items: flex-end; padding: 0 48px 48px; position: relative; overflow: hidden; }
+    .init-hero-emoji { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); font-size: 200px; opacity: .1; pointer-events:none; }
+    .init-hero-content { position: relative; z-index: 2; }
+    .prog-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-top: 20px; }
+    .prog-card { background: var(--bg2); border-radius: var(--r-lg); padding: 22px; border: 1.5px solid rgba(0,0,0,.06); }
+    [data-theme="dark"] .prog-card { border-color: rgba(255,255,255,.07); }
+    .prog-card h4 { font-size: 15px; margin-bottom: 6px; }
+    .prog-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    @media(max-width:768px){ .prog-grid{grid-template-columns:1fr;} .init-hero{padding: 0 24px 36px;} .init-hero-emoji{display:none;} }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">Lifex<em>Life</em></a>
+      <div class="nav-links">
+        <div class="nav-item">
+          <button class="nav-link">Iniciativas <span class="nav-arrow">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="spark.html">🎨 SPARK — Creative Arts</a>
+            <a href="rooted.html">🌿 ROOTED — Nature Wellness</a>
+            <a href="thrive.html">🤝 THRIVE — Mental Health</a>
+            <a href="lead.html">⭐ LEAD — Liderazgo</a>
+          </div>
+        </div>
+        <a href="impacto.html" class="nav-link">Impacto</a>
+        <a href="nosotros.html" class="nav-link">Nosotros</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="contacto.html" class="nav-link">Contacto</a>
+      </div>
+      <div class="nav-right">
+        <button class="lang-btn nav-theme-inline">EN</button>
+        <button class="nav-theme">☾ DARK</button>
+        <a href="donar.html"><button class="nav-cta">Donar →</button></a>
+        <button class="nav-mobile-btn" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <a href="../index.html">Inicio</a>
+    <a href="iniciativas.html">Iniciativas</a>
+    <a href="spark.html" style="padding-left:24px;font-size:15px">↳ SPARK</a>
+    <a href="rooted.html" style="padding-left:24px;font-size:15px">↳ ROOTED</a>
+    <a href="thrive.html" style="padding-left:24px;font-size:15px">↳ THRIVE</a>
+    <a href="lead.html" style="padding-left:24px;font-size:15px">↳ LEAD</a>
+    <a href="impacto.html">Impacto</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="donar.html" style="color:var(--p);font-weight:700">Donar →</a>
+  </div>
+  
+
+  <div class="init-hero">
+    <span class="init-hero-emoji">🌿</span>
+    <div class="init-hero-content">
+      <span style="display:inline-block;background:rgba(255,255,255,.15);color:#fff;border-radius:999px;padding:5px 16px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;margin-bottom:14px">INICIATIVA 02 · ROOTED</span>
+      <h1 style="font-family:var(--display);font-size:clamp(32px,5vw,54px);color:#fff;margin-bottom:14px;font-weight:800;line-height:1.02">Nature-Based Wellness.</h1>
+      <p style="font-size:15px;color:rgba(255,255,255,.78);max-width:520px;line-height:1.7;margin-bottom:24px">Environmental stewardship y mindfulness: caminatas, huertos comunitarios, eco-arte y prácticas de atención plena al aire libre.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="donar.html"><button class="btn-white">Apoyar ROOTED</button></a>
+        <a href="contacto.html"><button class="btn-ghost">Participar →</button></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item">ROOTED <span class="ticker-sep">×</span></span>
+      <span class="ticker-item">Nature-Based Wellness <span class="ticker-sep">×</span></span>
+      <span class="ticker-item">LIFEXLIFE FOUNDATION <span class="ticker-sep">×</span></span>
+      <span class="ticker-item">LOS ÁNGELES, CA <span class="ticker-sep">×</span></span>
+      <span class="ticker-item">ROOTED <span class="ticker-sep">×</span></span>
+      <span class="ticker-item">Nature-Based Wellness <span class="ticker-sep">×</span></span>
+      <span class="ticker-item">LIFEXLIFE FOUNDATION <span class="ticker-sep">×</span></span>
+      <span class="ticker-item">LOS ÁNGELES, CA <span class="ticker-sep">×</span></span>
+    </div>
+  </div>
+
+  <section class="section">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start">
+      <div>
+        <div class="eyebrow">QUÉ ES ROOTED</div>
+        <h2 class="section-title" style="font-size:28px">Descripción<br><em>del programa.</em></h2>
+        <p style="font-size:15px;line-height:1.75;margin-bottom:16px">Environmental stewardship y mindfulness: caminatas, huertos comunitarios, eco-arte y prácticas de atención plena al aire libre.</p>
+        <p style="font-size:14px;line-height:1.75;color:var(--text2)">Este programa es parte integral de la misión de LifexLife Foundation de transformar comunidades desde adentro, con un enfoque culturalmente relevante y bilingüe.</p>
+      </div>
+      <div style="background:var(--bg2);border-radius:var(--r-xl);padding:32px;border:1.5px solid rgba(0,0,0,.06)">
+        <div class="eyebrow">RESULTADOS ESPERADOS</div>
+        <h3 style="font-size:20px;margin-bottom:12px">Conexión con la naturaleza, reducción de estrés y conciencia ambiental.</h3>
+        <p style="font-size:14px;line-height:1.7">Los participantes desarrollan habilidades prácticas, conexiones comunitarias significativas y herramientas para el bienestar integral a largo plazo.</p>
+        <a href="donar.html" style="display:inline-block;margin-top:20px;background:var(--rooted);color:#fff;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:700;font-family:var(--body)">Apoyar este programa →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="eyebrow">PROGRAMAS</div>
+    <h2 class="section-title" style="font-size:28px">Qué<br><em>ofrecemos.</em></h2>
+    <div class="prog-grid">
+      <div class="prog-card"><h4>Caminatas · Huertos · Eco-Arte · Mindfulness</h4><p>Actividades estructuradas diseñadas para el bienestar integral, culturalmente relevantes y accesibles para toda la comunidad.</p></div>
+      <div class="prog-card"><h4>Facilitadores Comunitarios</h4><p>Red de voluntarios capacitados que llevan el programa directamente a la comunidad con un enfoque bilingüe y culturalmente sensible.</p></div>
+      <div class="prog-card"><h4>Galería y Evidencia</h4><p>Documentación de actividades, logros y transformaciones — próximamente con fotos y videos de nuestros participantes.</p></div>
+      <div class="prog-card"><h4>Alianzas Locales</h4><p>Colaboramos con escuelas, centros comunitarios y organizaciones del Distrito Pacífico Sur y áreas circundantes de Los Ángeles.</p></div>
+    </div>
+  </section>
+
+  <div class="newsletter" style="margin:32px">
+    <div class="nl-blob"></div>
+    <div class="eyebrow">INVOLÚCRATE</div>
+    <h2 class="nl-title">Sé parte de<br><em>ROOTED.</em></h2>
+    <p class="nl-sub">¿Quieres participar, ser voluntario o apoyar este programa? Escríbenos directamente.</p>
+    <a href="contacto.html" style="display:inline-block;background:var(--rooted);color:#fff;border-radius:999px;padding:12px 28px;font-size:14px;font-weight:700;font-family:var(--body)">Contáctanos →</a>
+  </div>
+
+  
+  <script src="../js/i18n.js"></script>
+  <script src="../js/main.js"></script>
+  <div class="footer-wrap">
+    <footer class="footer">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">Lifex<em>Life</em></div>
+          <div class="footer-found">FOUNDATION</div>
+          <p class="footer-desc">Transformando comunidades a través del arte, la naturaleza, la salud mental y el liderazgo con propósito.</p>
+        </div>
+        <div class="footer-col"><h5>INICIATIVAS</h5><a href="spark.html">SPARK</a><a href="rooted.html">ROOTED</a><a href="thrive.html">THRIVE</a><a href="lead.html">LEAD</a></div>
+        <div class="footer-col"><h5>ORGANIZACIÓN</h5><a href="nosotros.html">Nosotros</a><a href="impacto.html">Impacto</a><a href="nosotros.html#transparencia">Transparencia</a><a href="nosotros.html#prensa">Prensa</a></div>
+        <div class="footer-col"><h5>CONTACTO</h5><a href="mailto:Info@lifexlife.org">Info@lifexlife.org</a><a href="#">Los Ángeles, CA</a><a href="donar.html">Donar</a><a href="contacto.html">Voluntariado</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 LIFEXLIFE FOUNDATION · <span class="footer-ein">EIN: 41-4788665</span> · 501(c)(3)</p>
+        <p>JUNTOS SOMOS MEJORES · TOGETHER WE ARE BETTER</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

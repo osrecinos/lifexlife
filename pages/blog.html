@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Blog & Noticias — LifexLife Foundation</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .blog-filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
+    .filter-btn {
+      border-radius:999px; padding:7px 18px; font-family:var(--mono);
+      font-size:10px; letter-spacing:0.1em; border:1.5px solid var(--bg4);
+      background:transparent; cursor:pointer; color:var(--text2); transition:all 0.2s;
+    }
+    .filter-btn.active,.filter-btn:hover { border-color:var(--p); color:var(--p); background:var(--p-l); }
+    .admin-bar {
+      background:var(--p-l); border-bottom:1px solid var(--bg4);
+      padding:10px 40px; display:flex; justify-content:space-between; align-items:center;
+    }
+    .admin-bar span { font-family:var(--mono); font-size:10px; color:var(--p); letter-spacing:0.08em; }
+    .admin-bar a {
+      font-family:var(--mono); font-size:10px; letter-spacing:0.1em;
+      background:var(--p); color:#fff; border-radius:999px; padding:5px 16px;
+      transition:background 0.2s;
+    }
+    .admin-bar a:hover { background:var(--p-m); }
+    .no-posts { text-align:center; padding:60px 20px; color:var(--text3); }
+    .no-posts p { font-size:15px; margin-bottom:8px; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">Lifex<em>Life</em></a>
+      <div class="nav-links">
+        <div class="nav-item">
+          <button class="nav-link">Iniciativas <span class="nav-arrow">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="spark.html">🎨 SPARK — Creative Arts</a>
+            <a href="rooted.html">🌿 ROOTED — Nature Wellness</a>
+            <a href="thrive.html">🤝 THRIVE — Mental Health</a>
+            <a href="lead.html">⭐ LEAD — Liderazgo</a>
+          </div>
+        </div>
+        <a href="impacto.html" class="nav-link">Impacto</a>
+        <a href="nosotros.html" class="nav-link">Nosotros</a>
+        <a href="blog.html" class="nav-link active">Blog</a>
+        <a href="contacto.html" class="nav-link">Contacto</a>
+      </div>
+      <div class="nav-right">
+        <button class="lang-btn nav-theme-inline">EN</button>
+        <button class="nav-theme">☾ DARK</button>
+        <a href="donar.html"><button class="nav-cta">Donar →</button></a>
+        <button class="nav-mobile-btn" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <a href="../index.html">Inicio</a>
+    <a href="iniciativas.html">Iniciativas</a>
+    <a href="impacto.html">Impacto</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="donar.html" style="color:var(--p);font-weight:700">Donar →</a>
+  </div>
+
+  <!-- Admin bar -->
+  <div class="admin-bar">
+    <span>📝 <span data-i18n="blog.adminBar">PUBLICAR NOTICIAS → PANEL DE ADMINISTRACIÓN</span></span>
+    <a href="../admin/index.html" data-i18n="blog.adminLink">Agregar Noticia →</a>
+  </div>
+
+  <div class="page-hero">
+    <span class="page-hero-badge" data-i18n="blog.eyebrow">NOTICIAS E HISTORIAS</span>
+    <h1>Lo que está<br><em style="color:var(--p)">pasando.</em></h1>
+    <p>Historias de impacto, actualizaciones de programas y noticias de la comunidad LifexLife.</p>
+  </div>
+
+  <div class="section">
+    <div class="blog-filters">
+      <button class="filter-btn active" onclick="filterBlog('all',this)">TODAS</button>
+      <button class="filter-btn" onclick="filterBlog('spark',this)">🎨 SPARK</button>
+      <button class="filter-btn" onclick="filterBlog('rooted',this)">🌿 ROOTED</button>
+      <button class="filter-btn" onclick="filterBlog('thrive',this)">🤝 THRIVE</button>
+      <button class="filter-btn" onclick="filterBlog('lead',this)">⭐ LEAD</button>
+      <button class="filter-btn" onclick="filterBlog('general',this)">📰 GENERAL</button>
+    </div>
+
+    <div class="blog-grid" id="blogGrid">
+      <!-- loaded by JS below -->
+    </div>
+
+    <div class="no-posts" id="noPosts" style="display:none">
+      <p>Aún no hay noticias publicadas.</p>
+      <p><a href="../admin/index.html" style="color:var(--p);font-weight:600">Publica tu primera noticia →</a></p>
+    </div>
+  </div>
+
+  <!-- POST DETAIL MODAL -->
+  <div id="postModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);overflow-y:auto;padding:24px 16px;" onclick="if(event.target===this)closePost()">
+    <div style="max-width:700px;margin:0 auto;background:var(--bg2);border-radius:24px;padding:40px 36px;position:relative;box-shadow:0 24px 64px rgba(0,0,0,0.18);">
+      <button onclick="closePost()" style="position:absolute;top:16px;right:16px;background:var(--bg3);border:none;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:18px;color:var(--text2);display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
+      <div id="postModalBody"></div>
+    </div>
+  </div>
+
+  <div class="footer-wrap">
+    <footer class="footer">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">Lifex<em>Life</em></div>
+          <div class="footer-found">FOUNDATION</div>
+          <p class="footer-desc">Transformando comunidades a través del arte, la naturaleza, la salud mental y el liderazgo.</p>
+        </div>
+        <div class="footer-col"><h5>INICIATIVAS</h5><a href="spark.html">SPARK</a><a href="rooted.html">ROOTED</a><a href="thrive.html">THRIVE</a><a href="lead.html">LEAD</a></div>
+        <div class="footer-col"><h5>ORGANIZACIÓN</h5><a href="nosotros.html">Nosotros</a><a href="impacto.html">Impacto</a><a href="nosotros.html#transparencia">Transparencia</a></div>
+        <div class="footer-col"><h5>CONTACTO</h5><a href="mailto:Info@lifexlife.org">Info@lifexlife.org</a><a href="#">Los Ángeles, CA</a><a href="donar.html">Donar</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 LIFEXLIFE FOUNDATION · <span class="footer-ein">EIN: 41-4788665</span> · 501(c)(3)</p>
+        <p>JUNTOS SOMOS MEJORES · TOGETHER WE ARE BETTER</p>
+      </div>
+    </footer>
+  </div>
+
+<script src="../js/i18n.js"></script>
+  <script src="../js/main.js"></script>
+<script>
+const STORAGE_KEY = 'lxl_blog_posts';
+let allPosts = [];
+let activeFilter = 'all';
+
+const catEmoji = {spark:'🎨',rooted:'🌿',thrive:'🤝',lead:'⭐',general:'📰'};
+const catLabel  = {spark:'SPARK',rooted:'ROOTED',thrive:'THRIVE',lead:'LEAD',general:'GENERAL'};
+
+function formatDate(d) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('es-MX',{year:'numeric',month:'short',day:'numeric'}).toUpperCase();
+}
+
+// Static fallback posts shown if no admin posts exist
+const fallbackPosts = [
+  { id:1, cat:'spark',  title:'Nuevos talleres de teatro comunitario en el Distrito Pacífico Sur', desc:'Más de 80 jóvenes participaron en el primer ciclo de primavera 2026 transformando sus vidas a través del arte.', img:'', date:'2026-04-10' },
+  { id:2, cat:'lead',   title:'Tercera generación de Raíces y Caminos completa su programa',       desc:'24 jóvenes líderes graduados listos para multiplicar el impacto en sus comunidades de Los Ángeles.',       img:'', date:'2026-03-28' },
+  { id:3, cat:'rooted', title:'Huerto comunitario de Watts celebra su primer aniversario',          desc:'El jardín ha producido más de 300 libras de vegetales frescos para familias locales durante este año.',     img:'', date:'2026-03-15' },
+  { id:4, cat:'thrive', title:'Primeros auxilios emocionales llega a tres nuevas escuelas',         desc:'Capacitamos a 45 maestros como facilitadores de bienestar mental no clínico en el área de Los Ángeles.',  img:'', date:'2026-02-22' },
+  { id:5, cat:'spark',  title:'Mural comunitario "Raíces Vivas" inaugurado en South LA',            desc:'Treinta jóvenes artistas colaboraron durante 6 semanas en la creación de este mural de 80 pies de largo.', img:'', date:'2026-01-30' },
+  { id:6, cat:'lead',   title:'LifexLife recibe grant de Google for Nonprofits',                   desc:'El reconocimiento permitirá expandir el programa LEAD a dos nuevas comunidades del área metropolitana.',   img:'', date:'2026-01-15' }
+];
+
+function renderCard(p) {
+  const emoji = catEmoji[p.cat] || '📰';
+  const label = catLabel[p.cat] || p.cat.toUpperCase();
+  return `
+    <div class="blog-card" data-cat="${p.cat}" onclick="openPost(${p.id})" style="cursor:pointer">
+      <div class="blog-card-img">
+        ${p.img ? `<img src="${p.img}" alt="${p.title}"/>` : `<span>${emoji}</span>`}
+        <span class="news-tag" style="position:absolute;top:12px;left:12px">${label}</span>
+      </div>
+      <div class="blog-card-body">
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <div class="blog-card-footer">
+          <span class="blog-date-small">${formatDate(p.date)}</span>
+          <span class="blog-read">Leer más →</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderBlog() {
+  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  allPosts = stored.length ? stored : fallbackPosts;
+  filterBlog(activeFilter, null);
+}
+
+function filterBlog(cat, btn) {
+  if (btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  activeFilter = cat;
+  const filtered = cat === 'all' ? allPosts : allPosts.filter(p => p.cat === cat);
+  const grid = document.getElementById('blogGrid');
+  const empty = document.getElementById('noPosts');
+  if (!filtered.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    grid.innerHTML = filtered.map(renderCard).join('');
+    empty.style.display = 'none';
+  }
+}
+
+renderBlog();
+
+function openPost(id) {
+  const p = allPosts.find(x => x.id == id);
+  if (!p) return;
+  const emoji = catEmoji[p.cat] || '📰';
+  const label = catLabel[p.cat]  || p.cat.toUpperCase();
+  document.getElementById('postModalBody').innerHTML = `
+    <div style="display:inline-block;background:var(--p-l);color:var(--p-d);border-radius:7px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:14px">${label}</div>
+    <h2 style="font-family:var(--display);font-size:clamp(20px,3.5vw,30px);font-weight:800;letter-spacing:-.025em;line-height:1.15;margin-bottom:12px">${p.title}</h2>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:20px">${formatDate(p.date)}</p>
+    ${p.img ? `<img src="${p.img}" alt="" style="width:100%;border-radius:14px;margin-bottom:22px;max-height:320px;object-fit:cover">` : `<div style="width:100%;height:140px;background:var(--p-l);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:22px">${emoji}</div>`}
+    <p style="font-size:15px;color:var(--text2);line-height:1.78;margin-bottom:18px">${p.desc}</p>
+    ${p.content ? `<div style="font-size:15px;line-height:1.78;color:var(--text);white-space:pre-wrap;border-top:1px solid var(--bg4);padding-top:18px">${p.content}</div>` : ''}
+  `;
+  document.getElementById('postModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closePost() {
+  document.getElementById('postModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePost(); });
+</script>
+</body>
+</html>
