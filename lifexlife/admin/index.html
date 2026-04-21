@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin — LifexLife Blog</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background:var(--bg); }
+    /* ── Password Gate ── */
+    #passGate {
+      display:none; position:fixed; inset:0; z-index:9999;
+      background:var(--bg); align-items:center; justify-content:center;
+    }
+    #passGate.show { display:flex; }
+    .pass-box {
+      background:var(--bg2); border:1px solid var(--bg4); border-radius:24px;
+      padding:48px 40px; width:100%; max-width:380px;
+      box-shadow:0 20px 56px rgba(0,0,0,0.10);
+      display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center;
+    }
+    .pass-logo { font-family:var(--display); font-size:22px; font-weight:800; letter-spacing:-0.03em; }
+    .pass-logo em { color:var(--p); font-style:normal; }
+    .pass-box h2 { font-size:20px; margin:0; }
+    .pass-box p  { font-size:13px; color:var(--text2); margin:0; }
+    .pass-input {
+      width:100%; padding:13px 16px; border-radius:12px;
+      border:1.5px solid var(--bg4); background:var(--bg3);
+      font-size:15px; font-family:var(--body); color:var(--text);
+      outline:none; text-align:center; letter-spacing:0.06em;
+      transition:border-color 0.2s;
+    }
+    .pass-input:focus { border-color:var(--p); }
+    .pass-btn {
+      width:100%; background:var(--p); color:#fff; border:none;
+      border-radius:999px; padding:13px; font-size:15px; font-weight:600;
+      font-family:var(--body); cursor:pointer; transition:background 0.15s;
+    }
+    .pass-btn:hover { background:var(--p-d); }
+    .pass-error { font-size:13px; color:#DC2626; display:none; }
+    .pass-error.show { display:block; }
+    .admin-header {
+      background:var(--p); color:#fff; padding:16px 40px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .admin-header h1 { font-size:18px; color:#fff; }
+    .admin-header a { color:rgba(255,255,255,0.8); font-size:13px; }
+    .tabs { display:flex; gap:8px; margin-bottom:28px; }
+    .tab-btn {
+      padding:9px 20px; border-radius:999px; border:1.5px solid var(--bg4);
+      background:transparent; cursor:pointer; font-size:13px; font-weight:600;
+      color:var(--text2); font-family:var(--body); transition:all 0.2s;
+    }
+    .tab-btn.active { background:var(--p); border-color:var(--p); color:#fff; }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    .post-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; margin-top:20px; }
+    .post-preview-card {
+      background:var(--bg2); border-radius:var(--r-lg); overflow:hidden;
+      border:1px solid var(--bg4);
+    }
+    .post-preview-card img { width:100%; height:120px; object-fit:cover; }
+    .post-preview-placeholder { width:100%; height:120px; background:var(--p-l); display:flex; align-items:center; justify-content:center; font-size:36px; }
+    .post-preview-body { padding:14px; }
+    .post-preview-body h4 { font-size:14px; margin-bottom:4px; line-height:1.3; }
+    .post-preview-body p { font-size:11px; color:var(--text3); font-family:var(--mono); margin-bottom:10px; }
+    .post-actions { display:flex; gap:8px; }
+    .edit-btn { flex:1; background:var(--p-l); color:var(--p); border:none; border-radius:999px; padding:6px 12px; font-size:11px; font-weight:700; cursor:pointer; font-family:var(--body); transition:background 0.2s; }
+    .edit-btn:hover { background:var(--p); color:#fff; }
+    .empty-state { text-align:center; padding:48px 20px; color:var(--text3); }
+    .empty-state p { font-size:14px; }
+    .char-count { font-size:11px; color:var(--text3); font-family:var(--mono); margin-top:4px; }
+    .required-star { color:var(--p); }
+  </style>
+</head>
+<body>
+
+  <!-- PASSWORD GATE -->
+  <div id="passGate">
+    <div class="pass-box">
+      <div class="pass-logo">Lifex<em>Life</em></div>
+      <h2>Panel de Administración</h2>
+      <p>Ingresa la contraseña para continuar</p>
+      <input type="password" id="passInput" class="pass-input" placeholder="Contraseña"
+        onkeydown="if(event.key==='Enter')checkPass()">
+      <button class="pass-btn" onclick="checkPass()">Entrar →</button>
+      <p class="pass-error" id="passError">Contraseña incorrecta. Intenta de nuevo.</p>
+    </div>
+  </div>
+
+  <div id="adminContent" style="display:none">
+  <div class="admin-header">
+    <h1>📝 LifexLife — Panel de Blog</h1>
+    <a href="../index.html">← Ver sitio</a>
+  </div>
+
+  <div class="admin-wrap">
+    <div class="admin-card">
+      <h2>Panel de Administración</h2>
+      <p>Agrega y administra las noticias que aparecen en el blog público.</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('new',this)">✏️ Nueva Noticia</button>
+        <button class="tab-btn" onclick="switchTab('posts',this)">📋 Mis Noticias (<span id="postCount">0</span>)</button>
+      </div>
+
+      <!-- TAB: NUEVA NOTICIA -->
+      <div class="tab-content active" id="tab-new">
+
+        <div class="form-group">
+          <label>TÍTULO <span class="required-star">*</span></label>
+          <input type="text" id="postTitle" placeholder="Escribe el título de la noticia..." maxlength="120"
+            oninput="document.getElementById('titleCount').textContent=this.value.length+'/120'"/>
+          <div class="char-count" id="titleCount">0/120</div>
+        </div>
+
+        <div class="form-group">
+          <label>CATEGORÍA <span class="required-star">*</span></label>
+          <div class="cat-select" id="catSelect">
+            <button class="cat-opt sel" onclick="selectCat(this,'spark')">🎨 SPARK</button>
+            <button class="cat-opt" onclick="selectCat(this,'rooted')">🌿 ROOTED</button>
+            <button class="cat-opt" onclick="selectCat(this,'thrive')">🤝 THRIVE</button>
+            <button class="cat-opt" onclick="selectCat(this,'lead')">⭐ LEAD</button>
+            <button class="cat-opt" onclick="selectCat(this,'general')">📰 GENERAL</button>
+          </div>
+          <input type="hidden" id="postCat" value="spark"/>
+        </div>
+
+        <div class="form-group">
+          <label>IMAGEN DE PORTADA</label>
+          <div class="img-upload-area" id="uploadArea" onclick="document.getElementById('imgInput').click()">
+            <input type="file" id="imgInput" accept="image/*" onchange="previewImg(this)" style="position:absolute;inset:0;opacity:0;cursor:pointer"/>
+            <div id="uploadPlaceholder">
+              <div style="font-size:32px;margin-bottom:8px">📸</div>
+              <div>Haz clic para subir una foto</div>
+              <div style="font-size:11px;margin-top:4px">JPG, PNG, WebP — máx 5MB</div>
+            </div>
+            <img id="imgPreviewEl" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/>
+          </div>
+          <input type="hidden" id="postImg" value=""/>
+        </div>
+
+        <div class="form-group">
+          <label>DESCRIPCIÓN CORTA <span class="required-star">*</span></label>
+          <textarea id="postDesc" placeholder="Escribe un resumen de 1-2 oraciones para mostrar en la tarjeta del blog..." rows="3" maxlength="280"
+            oninput="document.getElementById('descCount').textContent=this.value.length+'/280'"></textarea>
+          <div class="char-count" id="descCount">0/280</div>
+        </div>
+
+        <div class="form-group">
+          <label>CONTENIDO COMPLETO</label>
+          <textarea id="postContent" placeholder="Escribe el artículo completo aquí..." rows="8"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>FECHA DE PUBLICACIÓN</label>
+          <input type="date" id="postDate"/>
+        </div>
+
+        <button class="btn-primary" onclick="savePost()" style="width:100%;margin-top:8px">
+          Publicar Noticia →
+        </button>
+
+        <div class="success-toast" id="saveToast">
+          ✓ Noticia publicada correctamente. Aparecerá en el blog de inmediato.
+        </div>
+        <div class="success-toast" id="errorToast" style="background:#FAEAEA;color:#CC2A2A">
+          ⚠ Por favor completa el título y la descripción.
+        </div>
+      </div>
+
+      <!-- TAB: MIS NOTICIAS -->
+      <div class="tab-content" id="tab-posts">
+        <div id="postListWrap"></div>
+      </div>
+
+    </div>
+  </div>
+
+<script src="../js/main.js"></script>
+<script>
+const STORAGE_KEY = 'lxl_blog_posts';
+let posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+let selectedCat = 'spark';
+let editingId = null;
+
+// Set today's date
+document.getElementById('postDate').valueAsDate = new Date();
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'posts') renderPosts();
+}
+
+function selectCat(btn, cat) {
+  document.querySelectorAll('.cat-opt').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedCat = cat;
+  document.getElementById('postCat').value = cat;
+}
+
+function previewImg(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('La imagen debe ser menor de 5MB'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('uploadPlaceholder').style.display = 'none';
+    const img = document.getElementById('imgPreviewEl');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('postImg').value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function catEmoji(cat) {
+  const map = {spark:'🎨',rooted:'🌿',thrive:'🤝',lead:'⭐',general:'📰'};
+  return map[cat] || '📰';
+}
+function catLabel(cat) {
+  const map = {spark:'SPARK',rooted:'ROOTED',thrive:'THRIVE',lead:'LEAD',general:'GENERAL'};
+  return map[cat] || cat.toUpperCase();
+}
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('es-MX', {year:'numeric',month:'short',day:'numeric'}).toUpperCase();
+}
+
+function savePost() {
+  const title = document.getElementById('postTitle').value.trim();
+  const desc  = document.getElementById('postDesc').value.trim();
+  const content = document.getElementById('postContent').value.trim();
+  const img   = document.getElementById('postImg').value;
+  const date  = document.getElementById('postDate').value || new Date().toISOString().slice(0,10);
+  const cat   = selectedCat;
+
+  if (!title || !desc) {
+    showToast('errorToast'); return;
+  }
+
+  const post = { id: editingId || Date.now(), title, desc, content, img, cat, date };
+  if (editingId) {
+    posts = posts.map(p => p.id === editingId ? post : p);
+    editingId = null;
+  } else {
+    posts.unshift(post);
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  updateCount();
+  resetForm();
+  showToast('saveToast');
+}
+
+function resetForm() {
+  document.getElementById('postTitle').value = '';
+  document.getElementById('postDesc').value = '';
+  document.getElementById('postContent').value = '';
+  document.getElementById('postImg').value = '';
+  document.getElementById('imgPreviewEl').style.display = 'none';
+  document.getElementById('uploadPlaceholder').style.display = 'flex';
+  document.getElementById('postDate').valueAsDate = new Date();
+  document.getElementById('titleCount').textContent = '0/120';
+  document.getElementById('descCount').textContent  = '0/280';
+  selectCat(document.querySelector('.cat-opt'), 'spark');
+  editingId = null;
+}
+
+function deletePost(id) {
+  if (!confirm('¿Eliminar esta noticia del blog?')) return;
+  posts = posts.filter(p => p.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  updateCount();
+  renderPosts();
+}
+
+function editPost(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  editingId = id;
+  document.getElementById('postTitle').value = p.title;
+  document.getElementById('postDesc').value  = p.desc;
+  document.getElementById('postContent').value = p.content || '';
+  document.getElementById('postDate').value  = p.date;
+  document.getElementById('postCat').value   = p.cat;
+  document.getElementById('titleCount').textContent = p.title.length + '/120';
+  document.getElementById('descCount').textContent  = p.desc.length + '/280';
+  if (p.img) {
+    document.getElementById('postImg').value = p.img;
+    document.getElementById('imgPreviewEl').src = p.img;
+    document.getElementById('imgPreviewEl').style.display = 'block';
+    document.getElementById('uploadPlaceholder').style.display = 'none';
+  }
+  document.querySelectorAll('.cat-opt').forEach(b => {
+    b.classList.toggle('sel', b.onclick.toString().includes("'" + p.cat + "'"));
+  });
+  selectedCat = p.cat;
+  switchTab('new', document.querySelector('[onclick*="new"]'));
+  window.scrollTo(0,0);
+}
+
+function renderPosts() {
+  const wrap = document.getElementById('postListWrap');
+  if (!posts.length) {
+    wrap.innerHTML = '<div class="empty-state"><p>No tienes noticias publicadas aún.</p><p style="margin-top:8px">¡Crea tu primera noticia!</p></div>';
+    return;
+  }
+  wrap.innerHTML = '<div class="post-grid">' + posts.map(p => `
+    <div class="post-preview-card">
+      ${p.img
+        ? `<img src="${p.img}" alt="${p.title}"/>`
+        : `<div class="post-preview-placeholder">${catEmoji(p.cat)}</div>`}
+      <div class="post-preview-body">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--p);letter-spacing:.1em">${catLabel(p.cat)}</span>
+        <h4>${p.title}</h4>
+        <p>${formatDate(p.date)}</p>
+        <div class="post-actions">
+          <button class="edit-btn" onclick="editPost(${p.id})">✏️ Editar</button>
+          <button class="del-btn" onclick="deletePost(${p.id})">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  `).join('') + '</div>';
+}
+
+function updateCount() {
+  document.getElementById('postCount').textContent = posts.length;
+}
+
+function showToast(id) {
+  const t = document.getElementById(id);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+updateCount();
+</script>
+</div><!-- /adminContent -->
+
+<script>
+/* ── PASSWORD GATE ── */
+const PASS_HASH = 'c380829113849eb7eea9e81d3a5643baeaea539eff246185688a1451cba02bd6';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkPass() {
+  const pw = document.getElementById('passInput').value;
+  const hash = await sha256(pw);
+  if (hash === PASS_HASH) {
+    sessionStorage.setItem('lxl-admin', 'ok');
+    document.getElementById('passGate').classList.remove('show');
+    document.getElementById('adminContent').style.display = 'block';
+  } else {
+    document.getElementById('passError').classList.add('show');
+    document.getElementById('passInput').value = '';
+    document.getElementById('passInput').focus();
+  }
+}
+
+/* Show gate unless already authenticated in this session */
+if (sessionStorage.getItem('lxl-admin') !== 'ok') {
+  document.getElementById('passGate').classList.add('show');
+} else {
+  document.getElementById('adminContent').style.display = 'block';
+}
+</script>
+</body>
+</html>

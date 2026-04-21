@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Donar — LifexLife Foundation</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .donate-layout { display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:start; }
+    .donate-box { background:var(--bg2); border-radius:var(--r-2xl); padding:44px; border:1px solid var(--bg4); position:relative; overflow:hidden; }
+    .donate-box-blob { position:absolute; right:-60px; top:-60px; width:200px; height:200px; border-radius:50%; background:var(--p-l); opacity:0.7; pointer-events:none; }
+    .donate-box h2 { font-size:28px; margin-bottom:8px; }
+    .custom-wrap { position:relative; margin-bottom:22px; }
+    .custom-wrap span { position:absolute; left:18px; top:50%; transform:translateY(-50%); font-size:20px; font-weight:700; color:var(--text2); }
+    .custom-input { width:100%; padding:14px 20px 14px 36px; background:var(--bg3); border:1.5px solid var(--bg4); border-radius:var(--r); font-size:22px; font-family:var(--display); font-weight:800; color:var(--text); outline:none; transition:border-color 0.2s; }
+    [data-theme="dark"] .custom-input { border-color:rgba(255,255,255,0.08); }
+    .custom-input:focus { border-color:var(--p); }
+    .impact-list { list-style:none; }
+    .impact-list li { display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--text2); padding:10px 0; border-bottom:1px solid var(--bg4); line-height:1.5; }
+    .impact-list li:last-child { border-bottom:none; }
+    .idot { width:8px; height:8px; border-radius:50%; background:var(--p); flex-shrink:0; margin-top:6px; }
+    .other-card { background:var(--bg2); border-radius:var(--r-lg); padding:18px 20px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid var(--bg4); }
+    [data-theme="dark"] .other-card { border-color:rgba(255,255,255,0.06); }
+    .other-card h4 { font-size:14px; margin-bottom:3px; }
+    .other-card p { font-size:12px; color:var(--text2); margin:0; }
+    .other-link { font-size:12px; font-weight:700; color:var(--p); white-space:nowrap; }
+    .secure-note { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text3); margin-top:14px; font-family:var(--mono); }
+    @media(max-width:900px){ .donate-layout{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">Lifex<em>Life</em></a>
+      <div class="nav-links">
+        <div class="nav-item">
+          <button class="nav-link">Iniciativas <span class="nav-arrow">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="spark.html">🎨 SPARK</a><a href="rooted.html">🌿 ROOTED</a>
+            <a href="thrive.html">🤝 THRIVE</a><a href="lead.html">⭐ LEAD</a>
+          </div>
+        </div>
+        <a href="impacto.html" class="nav-link">Impacto</a>
+        <a href="nosotros.html" class="nav-link">Nosotros</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="contacto.html" class="nav-link">Contacto</a>
+      </div>
+      <div class="nav-right">
+        <button class="lang-btn nav-theme-inline">EN</button>
+        <button class="nav-theme">☾ DARK</button>
+        <a href="donar.html"><button class="nav-cta">Donar →</button></a>
+        <button class="nav-mobile-btn" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <a href="../index.html">Inicio</a><a href="iniciativas.html">Iniciativas</a>
+    <a href="impacto.html">Impacto</a><a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a><a href="contacto.html">Contacto</a>
+    <a href="donar.html" style="color:var(--p);font-weight:700">Donar →</a>
+  </div>
+
+  <div class="page-hero">
+    <span class="page-hero-badge">DONAR</span>
+    <h1>Tu apoyo<br><em style="color:var(--p)">transforma vidas.</em></h1>
+    <p>Cada donación es deducible de impuestos y va directamente a nuestros programas. EIN: 41-4788665 · 501(c)(3)</p>
+  </div>
+
+  <div class="section">
+    <div class="donate-layout">
+
+      <!-- DONATION FORM -->
+      <div class="donate-box">
+        <div class="donate-box-blob"></div>
+        <div class="eyebrow">DONAR AHORA</div>
+        <h2>Elige tu<br><em style="color:var(--p)">impacto.</em></h2>
+        <p style="font-size:14px;color:var(--text2);margin-bottom:22px">Selecciona un monto o escribe el tuyo. Todas las donaciones son deducibles de impuestos.</p>
+
+        <div class="donate-amounts">
+          <button class="amount-btn" data-amount="25">$25</button>
+          <button class="amount-btn selected" data-amount="50">$50</button>
+          <button class="amount-btn" data-amount="100">$100</button>
+          <button class="amount-btn" data-amount="250">$250</button>
+        </div>
+
+        <div class="custom-wrap">
+          <span>$</span>
+          <input type="number" class="custom-input" id="customAmount" placeholder="Otro monto" min="1"
+            oninput="clearSelected()" />
+        </div>
+
+        <!-- PAYPAL DONATE BUTTON -->
+        <!-- ══════════════════════════════════════════════════════
+             PARA CONECTAR TU PAYPAL:
+             Reemplaza YOUR_PAYPAL_EMAIL@gmail.com con tu email de PayPal
+             en la línea del form action abajo.
+             También puedes reemplazar con tu Hosted Button ID de PayPal.
+             ══════════════════════════════════════════════════════ -->
+        <form id="ppForm" action="https://www.paypal.com/donate" method="post" target="_blank">
+          <input type="hidden" name="business" value="info@lifexlife.org"/>
+          <input type="hidden" name="item_name" value="Donación a LifexLife Foundation"/>
+          <input type="hidden" name="currency_code" value="USD"/>
+          <input type="hidden" name="no_recurring" value="0"/>
+          <input type="hidden" name="tax" value="0"/>
+          <input type="hidden" id="ppAmount" name="amount" value="50"/>
+          <input type="hidden" name="bn" value="PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"/>
+          <button type="submit" class="paypal-btn" onclick="setPPAmount()" style="width:100%;justify-content:center">
+            <span style="font-size:18px">💙</span> Donar con PayPal
+          </button>
+        </form>
+
+        <div class="secure-note">
+          <span>🔒</span> Pago seguro vía PayPal · LifexLife Foundation · EIN: 41-4788665 · 501(c)(3)
+        </div>
+      </div>
+
+      <!-- IMPACT + OTHER WAYS -->
+      <div>
+        <div class="eyebrow">TU IMPACTO</div>
+        <h3 style="font-family:var(--display);font-size:22px;font-weight:800;margin-bottom:16px">¿Qué hace<br><em style="color:var(--p)">tu donación?</em></h3>
+        <ul class="impact-list">
+          <li><div class="idot"></div><div><strong>$25</strong> — Materiales de arte para un joven en SPARK durante un mes.</div></li>
+          <li><div class="idot"></div><div><strong>$50</strong> — Una sesión completa de talleres de bienestar en ROOTED.</div></li>
+          <li><div class="idot"></div><div><strong>$100</strong> — Capacitación de un maestro como facilitador THRIVE.</div></li>
+          <li><div class="idot"></div><div><strong>$250</strong> — Una semana del programa LEAD Raíces y Caminos.</div></li>
+        </ul>
+
+        <div style="margin-top:32px">
+          <div class="eyebrow" style="margin-bottom:14px">OTRAS FORMAS DE AYUDAR</div>
+          <div class="other-card">
+            <div><h4>Voluntariado</h4><p>Únete como facilitador o mentor</p></div>
+            <a href="contacto.html#voluntariado" class="other-link">Aplicar →</a>
+          </div>
+          <div class="other-card">
+            <div><h4>Alianzas Corporativas</h4><p>Grants y patrocinios</p></div>
+            <a href="contacto.html" class="other-link">Contactar →</a>
+          </div>
+          <div class="other-card">
+            <div><h4>Difundir la misión</h4><p>Comparte en redes sociales</p></div>
+            <a href="#" class="other-link">Compartir →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-wrap">
+    <footer class="footer">
+      <div class="footer-grid">
+        <div><div class="footer-logo">Lifex<em>Life</em></div><div class="footer-found">FOUNDATION</div><p class="footer-desc">Transformando comunidades a través del arte, la naturaleza, la salud mental y el liderazgo.</p></div>
+        <div class="footer-col"><h5>INICIATIVAS</h5><a href="spark.html">SPARK</a><a href="rooted.html">ROOTED</a><a href="thrive.html">THRIVE</a><a href="lead.html">LEAD</a></div>
+        <div class="footer-col"><h5>ORGANIZACIÓN</h5><a href="nosotros.html">Nosotros</a><a href="impacto.html">Impacto</a><a href="nosotros.html#transparencia">Transparencia</a></div>
+        <div class="footer-col"><h5>CONTACTO</h5><a href="mailto:Info@lifexlife.org">Info@lifexlife.org</a><a href="#">Los Ángeles, CA</a><a href="donar.html">Donar</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 LIFEXLIFE FOUNDATION · <span class="footer-ein">EIN: 41-4788665</span> · 501(c)(3)</p>
+        <p>JUNTOS SOMOS MEJORES · TOGETHER WE ARE BETTER</p>
+      </div>
+    </footer>
+  </div>
+
+<script src="../js/i18n.js"></script>
+  <script src="../js/main.js"></script>
+<script>
+function clearSelected() {
+  document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+}
+function setPPAmount() {
+  const custom = document.getElementById('customAmount').value;
+  const selected = document.querySelector('.amount-btn.selected');
+  const amount = custom || selected?.dataset.amount || '50';
+  document.getElementById('ppAmount').value = amount;
+}
+</script>
+</body>
+</html>
